@@ -3,16 +3,22 @@ using UnityEngine.AI;
 
 public class Mover : MonoBehaviour
 {
-    [SerializeField] Transform target;
-    Ray rayLight;
+    // [SerializeField] Transform target;
+    // Ray rayLight;
         
     void Update()
     {
         if (Input.GetMouseButtonDown(0)){
-            rayLight = Camera.main.ScreenPointToRay(Input.mousePosition);
-            
+            MoveToCursor();
         }
-        Debug.DrawRay(rayLight.origin, rayLight.direction * 1000);
-        GetComponent<NavMeshAgent>().destination = target.position;
+    }
+
+    private void MoveToCursor(){
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        RaycastHit hit;
+        bool hasHit = Physics.Raycast(ray, out hit);
+        if (hasHit){
+            GetComponent<NavMeshAgent>().destination = hit.point;
+        } 
     }
 }
